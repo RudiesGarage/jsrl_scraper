@@ -1,4 +1,5 @@
 # JetSetRadio.live Scrapper
+# 3/24/2021 by Daniel McDonough
 # For Preservation uses only,
 
 import xml.etree.ElementTree as xml
@@ -50,7 +51,7 @@ def downloadTV(xmlfile):
                 except:
                     print("Could not find "+video)
 
-def downloadWall(cap=240):
+def downloadWall(cap=241):
     folder = "./wall/"
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -61,7 +62,7 @@ def downloadWall(cap=240):
         downloadImage(link, output_folder)
 
 
-def downloadImage(link,output_folder):
+def downloadImage(link,output_folder,fn):
     # Open the url image, set stream to True, this will return the stream content.
     r = requests.get(link, stream=True)
 
@@ -71,7 +72,7 @@ def downloadImage(link,output_folder):
         r.raw.decode_content = True
 
         # Open a local file with wb ( write binary ) permission.
-        with open(output_folder, 'wb') as f:
+        with open(fn, 'wb') as f:
             shutil.copyfileobj(r.raw, f)
 
         print('Image successfully Downloaded: ', output_folder)
@@ -87,11 +88,15 @@ def downloadRadio(station):
 
     # Download wallpapers icons etc:
     icon = jsrl_src + station + "/images/icon.png"
-    downloadImage(icon, folder+"/icon.png")
+    downloadImage(icon, folder,'icon.png')
     desc = jsrl_src + station + "/images/description.png"
-    downloadImage(desc, folder+"/description.png")
+    downloadImage(desc, folder,'description.png')
+    wallpaper = jsrl_src + station + "/images/wallpaper.jpeg"
+    downloadImage(wallpaper, folder,'wallpaper.jpeg')
     wallpaper = jsrl_src + station + "/images/wallpaper.jpg"
-    downloadImage(wallpaper, folder + "/wallpaper.jpg")
+    downloadImage(wallpaper, folder,'wallpaper.jpg')
+
+
 
     # get music list script
     js_url = jsrl_src + station + list_src
@@ -133,13 +138,9 @@ def downloadRadio(station):
 
 
 def DownloadWallpaperImages():
-    folder = "./wallpaper/"
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-
     for img in range(1, 13):
         link = wallpaper_src + str(img) + ".gif"
-        output_folder = folder + "wallpaper" + str(img) + ".gif"
+        output_folder = "./wallpaper/wallpaper" + str(img) + ".gif"
         downloadImage(link, output_folder)
 
 
@@ -148,7 +149,7 @@ def main():
     parser.add_argument('-r', help="Download all music and images from a radio station; pass a file with station names to download more than one station ", action='store', dest='radio', nargs='*', type=str, required=False)
     parser.add_argument('-t', help="Download all TV videos; (Warning this takes some time and about 70GB) ", action='store', dest='tv', nargs='*', type=str, required=False)
     parser.add_argument('-w', help="Download all default images from the wall;  ", action='store', dest='wall', nargs='*', type=str, required=False)
-    parser.add_argument('-wp', help="Download all gif wallpaper;  ", action='store', dest='wallpaper', nargs='*', type=str, required=False)
+    parser.add_argument('-wallpaper', help="Download wallpaper;  ", action='store', dest='wallpaper', nargs='*', type=str, required=False)
 
     args = parser.parse_args()
     if args.radio is not None:

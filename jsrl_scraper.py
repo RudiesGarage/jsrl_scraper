@@ -59,10 +59,10 @@ def downloadWall(cap=241):
     for img in range(1, cap):
         link = wall_src + str(img) + ".png"
         output_folder = folder + str(img) + ".png"
-        downloadImage(link, output_folder)
+        downloadFile(link, output_folder)
 
 
-def downloadImage(link,output_folder,fn):
+def downloadFile(link,output_folder,fn):
     # Open the url image, set stream to True, this will return the stream content.
     r = requests.get(link, stream=True)
 
@@ -75,9 +75,9 @@ def downloadImage(link,output_folder,fn):
         with open(fn, 'wb') as f:
             shutil.copyfileobj(r.raw, f)
 
-        print('Image successfully Downloaded: ', output_folder)
+        print('File successfully Downloaded: ', output_folder)
     else:
-        print('Image Couldn\'t be retrieved: ' + link)
+        print('File Couldn\'t be retrieved: ' + link)
 
 
 def downloadRadio(station):
@@ -88,14 +88,15 @@ def downloadRadio(station):
 
     # Download wallpapers icons etc:
     icon = jsrl_src + station + "/images/icon.png"
-    downloadImage(icon, folder,'icon.png')
+    downloadFile(icon, folder,'icon.png')
     desc = jsrl_src + station + "/images/description.png"
-    downloadImage(desc, folder,'description.png')
+    downloadFile(desc, folder,'description.png')
     wallpaper = jsrl_src + station + "/images/wallpaper.jpeg"
-    downloadImage(wallpaper, folder,'wallpaper.jpeg')
+    downloadFile(wallpaper, folder,'wallpaper.jpeg')
     wallpaper = jsrl_src + station + "/images/wallpaper.jpg"
-    downloadImage(wallpaper, folder,'wallpaper.jpg')
-
+    downloadFile(wallpaper, folder,'wallpaper.jpg')
+    list =  jsrl_src + station + "/~list.js"
+    downloadFile(list,folder,'~list.js')
 
 
     # get music list script
@@ -141,7 +142,7 @@ def DownloadWallpaperImages():
     for img in range(1, 13):
         link = wallpaper_src + str(img) + ".gif"
         output_folder = "./wallpaper/wallpaper" + str(img) + ".gif"
-        downloadImage(link, output_folder)
+        downloadFile(link, output_folder)
 
 
 def main():
@@ -169,7 +170,7 @@ def main():
 
     if args.wall is not None:
         downloadWall()
-
+    
     if args.wallpaper is not None:
         DownloadWallpaperImages()
 

@@ -31,3 +31,5 @@ verafx
 classical
 snowfi
 garage
+retroremix
+chiptunes
